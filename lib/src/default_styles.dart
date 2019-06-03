@@ -29,7 +29,7 @@ const TextStyle defaultWeekdayTextStyle = const TextStyle(
 	fontSize: 14.0,
 );
 const TextStyle defaultWeekendTextStyle = const TextStyle(
-	color: Colors.pinkAccent,
+	color: Colors.white,
 	fontSize: 14.0,
 );
 const TextStyle defaultInactiveDaysTextStyle = const TextStyle(

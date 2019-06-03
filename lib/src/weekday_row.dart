@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-import 'package:flutter_calendar_carousel/src/default_styles.dart'
-    show defaultWeekdayTextStyle;
+import '../flutter_calendar_carousel.dart';
+import './default_styles.dart' show defaultWeekdayTextStyle;
 import 'package:intl/intl.dart';
 
+
 class WeekdayRow extends StatelessWidget {
-  WeekdayRow(
-      this.firstDayOfWeek,
+  WeekdayRow(this.firstDayOfWeek,
       {@required this.showWeekdays,
       @required this.weekdayFormat,
       @required this.weekdayMargin,
@@ -14,7 +13,7 @@ class WeekdayRow extends StatelessWidget {
       @required this.localeDate});
 
   final bool showWeekdays;
-  final WeekdayFormat weekdayFormat;
+  final WeekdayFormatCustom weekdayFormat;
   final EdgeInsets weekdayMargin;
   final TextStyle weekdayTextStyle;
   final DateFormat localeDate;
@@ -73,27 +72,27 @@ class WeekdayRow extends StatelessWidget {
 
     /// because of number of days in a week is 7, so it would be easier to count it til 7.
     for (var i = firstDayOfWeek, count = 0;
-    count < 7;
-    i = (i + 1) % 7, count++) {
+        count < 7;
+        i = (i + 1) % 7, count++) {
       String weekDay;
 
       switch (weekdayFormat) {
-        case WeekdayFormat.weekdays:
+        case WeekdayFormatCustom.weekdays:
           weekDay = localeDate.dateSymbols.WEEKDAYS[i];
           break;
-        case WeekdayFormat.standalone:
+        case WeekdayFormatCustom.standalone:
           weekDay = localeDate.dateSymbols.STANDALONEWEEKDAYS[i];
           break;
-        case WeekdayFormat.short:
+        case WeekdayFormatCustom.short:
           weekDay = localeDate.dateSymbols.SHORTWEEKDAYS[i];
           break;
-        case WeekdayFormat.standaloneShort:
+        case WeekdayFormatCustom.standaloneShort:
           weekDay = localeDate.dateSymbols.STANDALONESHORTWEEKDAYS[i];
           break;
-        case WeekdayFormat.narrow:
+        case WeekdayFormatCustom.narrow:
           weekDay = localeDate.dateSymbols.NARROWWEEKDAYS[i];
           break;
-        case WeekdayFormat.standaloneNarrow:
+        case WeekdayFormatCustom.standaloneNarrow:
           weekDay = localeDate.dateSymbols.STANDALONENARROWWEEKDAYS[i];
           break;
         default:
