@@ -2,8 +2,8 @@ library flutter_calendar_dooboo;
 
 import 'dart:async';
 
-import 'package:cwm_app/styles/styles.dart';
-import 'package:cwm_app/ui/widgets/flutter_calendar/src/default_styles.dart';
+// import 'package:cwm_app/styles/styles.dart';
+// import 'package:cwm_app/ui/widgets/flutter_calendar/src/default_styles.dart';
 import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -11,6 +11,7 @@ import 'package:intl/intl.dart' show DateFormat;
 
 import 'classes/event_list.dart';
 import 'src/calendar_header.dart';
+import 'src/default_styles.dart';
 import 'src/weekday_row.dart';
 
 typedef MarkedDateIconBuilder<T> = Widget Function(T event);
@@ -78,6 +79,7 @@ class CalendarCarousel<T> extends StatefulWidget {
   final bool staticSixWeekFormat;
   final bool isScrollable;
   final bool showOnlyCurrentMonthDate;
+  final Color bgColorCalendar;
 
   CalendarCarousel({
     this.viewportFraction = 1.0,
@@ -88,7 +90,7 @@ class CalendarCarousel<T> extends StatefulWidget {
     this.thisMonthDayBorderColor = Colors.transparent,
     this.nextMonthDayBorderColor = Colors.transparent,
     this.dayPadding = 2.0,
-    this.height = double.infinity,
+    this.height = 350.0,
     this.width = double.infinity,
     this.todayTextStyle,
     this.dayButtonColor = Colors.transparent,
@@ -140,7 +142,8 @@ class CalendarCarousel<T> extends StatefulWidget {
     this.weekDayFormat = WeekdayFormatCustom.short,
     this.staticSixWeekFormat = false,
     this.isScrollable = true,
-    this.showOnlyCurrentMonthDate = false,
+    this.showOnlyCurrentMonthDate = false, 
+    this.bgColorCalendar = Colors.black,
   });
 
   @override
@@ -216,7 +219,7 @@ class _CalendarState<T> extends State<CalendarCarousel<T>> {
     return Container(
       height: 350.0,
       decoration: BoxDecoration(
-          color: MyColors.mainBgColor,
+          color:widget.bgColorCalendar,
           borderRadius: BorderRadius.all(Radius.circular(8.0))),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -474,187 +477,6 @@ class _CalendarState<T> extends State<CalendarCarousel<T>> {
       ),
     );
   }
-
-  // AnimatedBuilder weekBuilder(int slideIndex) {
-  //   double screenWidth = MediaQuery.of(context).size.width;
-  //   List<DateTime> weekDays = _weeks[slideIndex];
-
-  //   return AnimatedBuilder(
-  //       animation: _controller,
-  //       builder: (context, child) {
-  //         double value = 1.0;
-  //         if (_controller.position.haveDimensions) {
-  //           value = _controller.page - slideIndex;
-  //           value = (1 - (value.abs() * .5)).clamp(0.0, 1.0);
-  //         }
-
-  //         return Center(
-  //           child: SizedBox(
-  //             height: Curves.easeOut.transform(value) * widget.height,
-  //             width: Curves.easeOut.transform(value) * screenWidth,
-  //             child: child,
-  //           ),
-  //         );
-  //       },
-  //       child: Stack(
-  //         children: <Widget>[
-  //           Positioned(
-  //             child: Container(
-  //               width: double.infinity,
-  //               height: double.infinity,
-  //               child: GridView.count(
-  //                 crossAxisCount: 7,
-  //                 childAspectRatio: widget.childAspectRatio,
-  //                 padding: EdgeInsets.zero,
-  //                 children: List.generate(weekDays.length,
-
-  //                     /// last day of month + weekday
-  //                     (index) {
-  //                   bool isToday = weekDays[index].day == DateTime.now().day &&
-  //                       weekDays[index].month == DateTime.now().month &&
-  //                       weekDays[index].year == DateTime.now().year;
-  //                   bool isSelectedDay = this._selectedDate != null &&
-  //                       this._selectedDate.year == weekDays[index].year &&
-  //                       this._selectedDate.month == weekDays[index].month &&
-  //                       this._selectedDate.day == weekDays[index].day;
-  //                   bool isPrevMonthDay =
-  //                       weekDays[index].month < this._selectedDate.month;
-  //                   bool isNextMonthDay =
-  //                       weekDays[index].month > this._selectedDate.month;
-  //                   bool isThisMonthDay = !isPrevMonthDay && !isNextMonthDay;
-
-  //                   DateTime now = DateTime(weekDays[index].year,
-  //                       weekDays[index].month, weekDays[index].day);
-  //                   TextStyle textStyle;
-  //                   TextStyle defaultTextStyle;
-  //                   if (isPrevMonthDay && !widget.showOnlyCurrentMonthDate) {
-  //                     textStyle = widget.prevDaysTextStyle;
-  //                     defaultTextStyle = defaultPrevDaysTextStyle;
-  //                   } else if (isThisMonthDay) {
-  //                     textStyle = isSelectedDay
-  //                         ? widget.selectedDayTextStyle
-  //                         : isToday
-  //                             ? widget.todayTextStyle
-  //                             : widget.daysTextStyle;
-  //                     defaultTextStyle = isSelectedDay
-  //                         ? defaultSelectedDayTextStyle
-  //                         : isToday
-  //                             ? defaultTodayTextStyle
-  //                             : defaultDaysTextStyle;
-  //                   } else if (!widget.showOnlyCurrentMonthDate) {
-  //                     textStyle = widget.nextDaysTextStyle;
-  //                     defaultTextStyle = defaultNextDaysTextStyle;
-  //                   } else {
-  //                     return Container();
-  //                   }
-  //                   bool isSelectable = true;
-  //                   if (widget.minSelectedDate != null &&
-  //                       now.millisecondsSinceEpoch <
-  //                           widget.minSelectedDate.millisecondsSinceEpoch)
-  //                     isSelectable = false;
-  //                   else if (widget.maxSelectedDate != null &&
-  //                       now.millisecondsSinceEpoch >
-  //                           widget.maxSelectedDate.millisecondsSinceEpoch)
-  //                     isSelectable = false;
-  //                   return Container(
-  //                     margin: EdgeInsets.all(widget.dayPadding),
-  //                     width: 50.0,
-  //                     height: 50.0,
-  //                     child: FlatButton(
-  //                       color: isSelectedDay &&
-  //                               widget.selectedDayButtonColor != null
-  //                           ? widget.selectedDayButtonColor
-  //                           : isToday && widget.todayButtonColor != null
-  //                               ? widget.todayButtonColor
-  //                               : widget.dayButtonColor,
-  //                       onPressed: () {
-  //                         print("weekBuilder");
-  //                         _onDayPressed(now);
-  //                       },
-  //                       padding: EdgeInsets.all(widget.dayPadding),
-  //                       shape: widget.daysHaveCircularBorder == null
-  //                           ? CircleBorder()
-  //                           : widget.daysHaveCircularBorder
-  //                               ? CircleBorder(
-  //                                   side: BorderSide(
-  //                                     color: isSelectedDay
-  //                                         ? widget.selectedDayBorderColor
-  //                                         : isToday &&
-  //                                                 widget.todayBorderColor !=
-  //                                                     null
-  //                                             ? widget.todayBorderColor
-  //                                             : isPrevMonthDay
-  //                                                 ? widget
-  //                                                     .prevMonthDayBorderColor
-  //                                                 : isNextMonthDay
-  //                                                     ? widget
-  //                                                         .nextMonthDayBorderColor
-  //                                                     : widget
-  //                                                         .thisMonthDayBorderColor,
-  //                                   ),
-  //                                 )
-  //                               : RoundedRectangleBorder(
-  //                                   side: BorderSide(
-  //                                     color: isSelectedDay
-  //                                         ? widget.selectedDayBorderColor
-  //                                         : isToday &&
-  //                                                 widget.todayBorderColor !=
-  //                                                     null
-  //                                             ? widget.todayBorderColor
-  //                                             : isPrevMonthDay
-  //                                                 ? widget
-  //                                                     .prevMonthDayBorderColor
-  //                                                 : isNextMonthDay
-  //                                                     ? widget
-  //                                                         .nextMonthDayBorderColor
-  //                                                     : widget
-  //                                                         .thisMonthDayBorderColor,
-  //                                   ),
-  //                                 ),
-  //                       child: Stack(
-  //                         children: <Widget>[
-  //                           Center(
-  //                             child: DefaultTextStyle(
-  //                               style: (index % 7 == 0 || index % 7 == 6) &&
-  //                                       !isSelectedDay &&
-  //                                       !isToday &&
-  //                                       !isPrevMonthDay &&
-  //                                       !isNextMonthDay
-  //                                   ? (isSelectable
-  //                                       ? defaultWeekendTextStyle
-  //                                       : defaultInactiveWeekendTextStyle)
-  //                                   : isToday
-  //                                       ? defaultTodayTextStyle
-  //                                       : defaultTextStyle,
-  //                               child: Text(
-  //                                 '${now.day}',
-  //                                 style: (index % 7 == 0 || index % 7 == 6) &&
-  //                                         !isSelectedDay &&
-  //                                         !isToday
-  //                                     ? widget.weekendTextStyle
-  //                                     : isToday
-  //                                         ? widget.todayTextStyle
-  //                                         : isSelectable
-  //                                             ? textStyle
-  //                                             : widget.inactiveDaysTextStyle,
-  //                                 maxLines: 1,
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           widget.markedDatesMap != null
-  //                               ? _renderMarkedMapContainer(now)
-  //                               : _renderMarked(now),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                   );
-  //                 }),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ));
-  // }
 
   List<DateTime> _getDaysInWeek([DateTime selectedDate]) {
     if (selectedDate == null) selectedDate = new DateTime.now();
